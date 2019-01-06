@@ -8,9 +8,11 @@
     <b-container>
       <b-row>
         <b-col cols="4">
-          <UsersList />
+          <UsersList v-bind:selectUser="selectUser" v-bind:selectedUserId="selectedUserId" />
         </b-col>
-        <b-col cols="8">User info</b-col>
+        <b-col cols="8">
+          <UserInfo v-bind:data="userInfo" />
+        </b-col>
       </b-row>
     </b-container>
   </section>
@@ -19,20 +21,28 @@
 <script>
 import Logo from '~/components/Logo.vue';
 import UsersList from '~/components/UsersList.vue';
+import UserInfo from '~/components/UserInfo.vue';
 
 export default {
   components: {
     Logo,
     UsersList,
+    UserInfo,
   },
   data() {
     return ({
       title: 'Address book',
+      selectedUserId: null,
     });
   },
   methods: {
-    alertHi() {
-      console.log(this.$store);
+    selectUser(id) {
+      this.selectedUserId = id;
+    },
+  },
+  computed: {
+    userInfo: function() {
+      return this.$store.state.users.find(el => el.id === this.selectedUserId) || null;
     },
   }
 };
